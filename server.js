@@ -5,6 +5,7 @@ const Hyperbee = require('hyperbee')
 const SDK = require('hyper-sdk')
 const {DB} = require('hyperbeedeebee')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const DB_NAME = 'AKASHIC'
 let init = require('./init.js')
@@ -13,6 +14,7 @@ const bootstrap = async () => {
 
 	let records = await init(DB_NAME)
 
+	app.use(cors())
 	app.use(bodyParser.json())
 	app.use(bodyParser.urlencoded({extended:false}))
 
@@ -21,9 +23,11 @@ const bootstrap = async () => {
 	app.post('/pull', async (req,res) => {
 		console.log(req.body)
 		const cid = req.body.cid
+		const eth = req.body.eth
 
 		const doc = await records.db.collection(DB_NAME).insert({
-		  cid: cid
+		  cid: cid,
+		  eth: eth
 		})
 
 		res.send(doc)
@@ -41,6 +45,24 @@ const bootstrap = async () => {
 		  cid: {
 		    $exists: true
 		  }
+		})
+		const records = [['Cards', 'Value Staked', 'Value Left']]
+		console.log(docs)
+		// get cids with ipfs js
+		// unpack and repack into chart format
+
+		// iterate through and count the value
+		res.send(docs)
+	})
+
+	app.get('/simulate:eth', async (req,res) => {
+		const eth = req.params.eth
+		// assemble package
+		// post to ipfs, get cid
+		// 
+		const doc = await records.db.collection(DB_NAME).insert({
+		  cid: cid,
+		  eth: eth
 		})
 		res.send(docs)
 	})
