@@ -1,7 +1,7 @@
 const init = require('./init.js')
 
 async function runner() {
-  const db1Name = 'example1'
+  const db1Name = 'example2'
   const db2Name = 'akashic2'
 
   const records1 = await init(db1Name)
